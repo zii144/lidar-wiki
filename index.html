@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>光達開發 Wiki</title>
+<meta name="description" content="加密文件，需要密碼才能閱讀。">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="光達開發 Wiki">
+<meta property="og:title" content="光達開發 Wiki">
+<meta property="og:description" content="加密文件，需要密碼才能閱讀。">
+<meta property="og:url" content="https://zii144.github.io/lidar-wiki/">
+<meta property="og:image" content="https://zii144.github.io/lidar-wiki/og/home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1B5FD1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div id="lock" class="lock">
+  <form id="lock-form" class="lock-card" autocomplete="off">
+    <svg width="40" height="40" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="3" fill="currentColor"/><path d="M13 13 L24 6 M13 13 L25 11 M13 13 L25 16 M13 13 L24 20" stroke="var(--accent)" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
+    <h1>光達開發 Wiki</h1>
+    <p class="lede">這份文件已加密，請輸入密碼。</p>
+    <label for="pw">密碼</label>
+    <input id="pw" type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false">
+    <div id="key-row" class="key-row" hidden>
+      <label for="lk">金鑰</label>
+      <input id="lk" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="貼上完整的分享連結或金鑰">
+      <p class="hint">這個連結少了金鑰。請貼上完整的分享連結，或只貼金鑰。</p>
+    </div>
+    <label class="remember"><input id="remember" type="checkbox"> 在這台裝置記住</label>
+    <button class="btn primary" type="submit" id="go">解鎖</button>
+    <p id="err" class="err" role="alert" hidden></p>
+    <p class="hint">沒有密碼？請向 Zii 索取。</p>
+  </form>
+  <noscript><p class="hint">需要開啟 JavaScript 才能解鎖。</p></noscript>
+</div>
+<div id="app" hidden></div>
+<script id="payload" type="application/json">{"v":1,"iter":600000,"salt":"_9XwFVoHXzMK5L9xbAp9zw","iv":"gTsFr0j86Qb316sH","ct":"N3t89H0iX9dwtItsawi0FbGs3FBkUAvN-rgyASqGQ-jicA_PXMaiADC_1OM2X5udXDuJqGicGNoa9kNXB8zDp76fRxBff7PLLJalNh3oVujnGnEIZLKPxe7RR81j_Sk-G65epB6E83HeVxQOFbKjpKVX62_6ZoK3xiEjkuBsrmj6_AKvTVGXfqzbtOLvLI5FaFqMOlm-GdjQsejwkmPYaKVKIhmN7LFnwgCAk6lonBy4VHL2oMRJ-5Ael5z-KP91R9tX9i3Ud_8oI2WSJZ_OVx9CzY4rSeQlfruhcG4bY0Dazlu1WEthp0pbVewrl1CsYowjMhLBh_fKCP4VAaXfRyl83kb0EZikZ7JP9GpelqzU5pRZ4FlOW6ycYxw0KQUm0KlzzXIvb71DhVauH0LUKb-VTn9IQ_37EsS1na5DCVG7lLTm0Cm8ESym2ZwqKgH0pY0Ywt07vQ6_d0xJVTEC4hjbFMBU2k1dDURLH5qgfUYEalQLThwyihWwudBE9fUA_XblBGtht7OdYhZ-4m65i5Zkf1vt2xnv36POr-PbruV5VGyQsEgeaFhP3FMKoSDIbAlyiTgdKMoZgNVHuyBDLuJVo-LPNkaQl-BI_UODAUhHhKRuaAqgjZBgrRPrS5P368PzrNFqxMA9bfJUfdpnkbgJLj5Lfykn80Q9Cp4i91Jl0ZXJgdB9pxVoGTAsOg0Qa3ZSQtdhABP2pYI-IAFE6DhNMfn0PygpvsTpsYuNXL443B4GXBjvPXDH4P2lT6bkNd_GA4MP85tEkmKYyJcGoS2A4lDa9jhgfL6WAjxRQvzBVdmQdmzXi6BZvE9oBKb9VZWBCZ0weDe7SaD9cfYk372eNQi5gbIJY2RA6OBKZ5Xm7nGtcRYw1Awoy00ldPwcJJNlUFhb8WF383XVHDj2Bdu7RZAq-3cvzQiQWeshNHjIeQJ_ojyj-q6iwC3NuoHCMJGKTF0S4S78AVuwyVaiYAvBDx5bTlYjN9xT4m1H47Qc2jgMxVJbdnQOh8Ncr2Gsbibp8lA47rVFTvPV76UPG8QhyNuw3MoHTOosnTfV78XhAWcAra5jAHJtTyaW3ZzjbqDMXP8d6tUnfe0Gn1VO6Be3xxgNkIuKHtO0IkCb67tV4tMWwUxzoVq8K0ADJCY8g9-KW_WkvwbrRv9sUfBgS3ok06pT4kM9MG0RTEfNmt7zkO8bnbIdhdvSh3-kxJuo_593Aj37jrfbWxZHsnl5Cw74fHqW8iQNFSnifYDTSam54KphOHvTleEVBiok2T4nbntkobM3cI92JalSaNF6dERm8ogHyUMhWi7iPPT0lGSf9XqOE0h8YyDLhRiAT3DNek6legob_8j5vB1jIgXxv2eA-HoOrqjeTiNdcnGH1VVeUUPuKJWVT38qNSeXDSFSvzXksbSosCqreJah6W6JkNxMgVV82EltpE1R7e6Brph51nwBW-SI52MhVmwSLa7Vm3PaE6jiCrdv80_h0QZxtS5KK_3yfcvSNIP2gZgt_p3Kv52sfCcPjfjJSg_tngqkiGamP4AjUwpHhRw58XnPp1U9IMs2o__O8aKvhJUgW4tlLURDceMZga4Cac_MZYjJx9MaiUWGZiTvoti4W7KPMC8AuQaWQyT_6DdcVu7Tqsr5bQhVvk25OD4wXw1jjO_mEJ3D7yKB5ZkkkeHD4MAKtp_3U1wZXCAsTx9yJTJP8B-245hpzkGU4qe69VCo0q2kYeygyY7jxmgYIyr0_nT6PXSig_blIRQMBPqO-2F6BL_XmpNjluEuhGHuCen_z2A02U581rYBgbkpUOTX77iWPNaSZ6Z9RbT836wycIyb-a_DQYGuYBt0E5Fhnet6QwzJRPxHLp_tZfokzbCj0BJPHa7_TSJRSkPTY1czUn0X1GpJG7tZaFPtV5LGk1vf_F-411osKHJI6DTFtGNbySnujzLE1dfbhFIHz43DwUR8uitvP1DE65hvN1DhlbOES7Y8idm6NQ6fseADXOU_rkjUUDZlrqVsKkm8esr6JovAMjOr6uYoFLOusTljijnagGD5i_IjHNEdqUfgd78KwhMmOb5coZCD8-jj2P_Kzbg4D9zKIlIAvMgnFdm2OaZkGzEKWwicZRKjlDfjYBOAMGZ8QSRDlSVmdmjreH0MmHfaKUDRE5zphBOE1eD71ggt9t1--8UggMCYTDBhdFL8Mjb9SX94FtnA_e8T9skn2P1RMAYY6IEA7YPwt7RL3DomtRRiCgOR","title":"光達開發 Wiki"}</script>
+<script src="./unlock.js"></script>
+</body>
+</html>
