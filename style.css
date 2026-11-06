@@ -93,6 +93,7 @@ ol.steps li::before{content:counter(s);position:absolute;left:0;top:2px;width:24
 .fact small{display:block;color:var(--muted);font-size:12px;letter-spacing:.05em}
 .fact span{font-weight:700}
 .mono{font-family:var(--mono);font-size:.92em}
+code{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);padding:0 5px;border-radius:4px;overflow-wrap:anywhere}
 .ip{font-family:var(--mono);background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:4px;font-size:.9em;white-space:nowrap}
 .lock{min-height:100vh;min-height:100svh;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;padding-block:32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .lock-card{width:100%;max-width:380px;display:grid;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px 24px;color:var(--ink)}
