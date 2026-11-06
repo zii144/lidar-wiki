@@ -99,6 +99,8 @@
       box.querySelector('[data-lock]').addEventListener('click', function () { clearAll(); location.reload(); });
     });
 
+    app.querySelectorAll('[data-enc-video]').forEach(initVideo);
+
     var links = [].slice.call(app.querySelectorAll('#rail a'));
     if (links.length && 'IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (es) {
@@ -113,6 +115,75 @@
       }, { rootMargin: '-120px 0px -60% 0px' });
       app.querySelectorAll('main section').forEach(function (s) { io.observe(s); });
     }
+  }
+
+  // Encrypted video: download on demand, decrypt, play from a Blob URL.
+  // asset key = HKDF(linkKey, assetSalt, "lidar-wiki asset v1")
+  function initVideo(box) {
+    var video = box.querySelector('video'), btn = box.querySelector('[data-load]');
+    var prog = box.querySelector('.vprog'), bar = box.querySelector('[data-bar]'), status = box.querySelector('[data-status]');
+    var total = +box.dataset.size || 0, state = 'idle', pendingSeek = null;
+
+    function setProgress(frac, text) { bar.style.width = Math.round(frac * 100) + '%'; status.textContent = text; }
+    function seekAndPlay(t) {
+      video.currentTime = t;
+      var p = video.play(); if (p && p.catch) p.catch(function () {});
+    }
+
+    function download() {
+      return fetch(box.dataset.src).then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        var len = +res.headers.get('content-length') || total + 16;
+        if (!res.body || !res.body.getReader) return res.arrayBuffer();
+        var reader = res.body.getReader(), parts = [], got = 0;
+        return (function pump() {
+          return reader.read().then(function (r) {
+            if (r.done) {
+              var all = new Uint8Array(got), o = 0;
+              parts.forEach(function (p) { all.set(p, o); o += p.length; });
+              return all.buffer;
+            }
+            parts.push(r.value); got += r.value.length;
+            setProgress(Math.min(got / len, 1), '下載中 ' + Math.min(99, Math.floor(got / len * 100)) + '%');
+            return pump();
+          });
+        })();
+      });
+    }
+
+    function load() {
+      if (state !== 'idle') return;
+      state = 'loading';
+      btn.hidden = true; prog.hidden = false; setProgress(0, '下載中 0%');
+      download().then(function (buf) {
+        setProgress(1, '解密中…');
+        return subtle.importKey('raw', b64uDec(linkKey), 'HKDF', false, ['deriveBits'])
+          .then(function (hk) { return subtle.deriveBits({ name: 'HKDF', hash: 'SHA-256', salt: b64uDec(box.dataset.salt), info: te.encode('lidar-wiki asset v1') }, hk, 256); })
+          .then(function (bits) { return subtle.importKey('raw', bits, 'AES-GCM', false, ['decrypt']); })
+          .then(function (k) { return subtle.decrypt({ name: 'AES-GCM', iv: b64uDec(box.dataset.iv) }, k, buf); });
+      }).then(function (plain) {
+        video.src = URL.createObjectURL(new Blob([plain], { type: box.dataset.type || 'video/mp4' }));
+        state = 'ready';
+        prog.hidden = true;
+        var poster = box.querySelector('.poster'); if (poster) poster.hidden = true;
+        video.hidden = false;
+        seekAndPlay(pendingSeek || 0);
+      }).catch(function () {
+        state = 'idle';
+        prog.hidden = true; btn.hidden = false;
+        btn.querySelector('[data-label]').textContent = '載入失敗，點這裡重試';
+      });
+    }
+
+    btn.addEventListener('click', load);
+    document.querySelectorAll('[data-seek]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        var t = +el.dataset.seek || 0;
+        box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (state === 'ready') seekAndPlay(t);
+        else { pendingSeek = t; load(); }
+      });
+    });
   }
 
   var form = $('lock-form'), err = $('err'), go = $('go');
