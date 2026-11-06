@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>光達開發 Wiki</title>
-<meta name="description" content="加密文件，需要密碼才能閱讀。">
+<meta name="description" content="內部文件，需要分享連結才能開啟。">
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="光達開發 Wiki">
 <meta property="og:title" content="光達開發 Wiki">
-<meta property="og:description" content="加密文件，需要密碼才能閱讀。">
+<meta property="og:description" content="內部文件，需要分享連結才能開啟。">
 <meta property="og:url" content="https://zii144.github.io/lidar-wiki/">
 <meta property="og:image" content="https://zii144.github.io/lidar-wiki/og/home.png">
 <meta property="og:image:width" content="1200">
@@ -23,26 +23,22 @@
 </head>
 <body>
 <div id="lock" class="lock">
-  <form id="lock-form" class="lock-card" autocomplete="off">
+  <p id="opening" class="hint">開啟中…</p>
+  <form id="lock-form" class="lock-card" autocomplete="off" hidden>
     <svg width="40" height="40" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="3" fill="currentColor"/><path d="M13 13 L24 6 M13 13 L25 11 M13 13 L25 16 M13 13 L24 20" stroke="var(--accent)" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
     <h1>光達開發 Wiki</h1>
-    <p class="lede">這份文件已加密，請輸入密碼。</p>
-    <label for="pw">密碼</label>
-    <input id="pw" type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false">
-    <div id="key-row" class="key-row" hidden>
-      <label for="lk">金鑰</label>
-      <input id="lk" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="貼上完整的分享連結或金鑰">
-      <p class="hint">這個連結少了金鑰。請貼上完整的分享連結，或只貼金鑰。</p>
-    </div>
+    <p class="lede">這是內部文件，請用完整的分享連結開啟。</p>
+    <label for="lk">分享連結</label>
+    <input id="lk" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="貼上完整的分享連結">
     <label class="remember"><input id="remember" type="checkbox"> 在這台裝置記住</label>
-    <button class="btn primary" type="submit" id="go">解鎖</button>
+    <button class="btn primary" type="submit" id="go">開啟</button>
     <p id="err" class="err" role="alert" hidden></p>
-    <p class="hint">沒有密碼？請向 Zii 索取。</p>
+    <p class="hint">沒有連結？請向 Zii 索取。</p>
   </form>
-  <noscript><p class="hint">需要開啟 JavaScript 才能解鎖。</p></noscript>
+  <noscript><p class="hint">需要開啟 JavaScript 才能閱讀。</p></noscript>
 </div>
 <div id="app" hidden></div>
-<script id="payload" type="application/json">{"v":1,"iter":600000,"salt":"h5yQj2zuCZiGOtU3J8WJvw","iv":"VH39BL9hshWAg7Bg","ct":"voDLp7YKH-kT5TThVRbDtbM2sI8I9y78CWsVsfgnjOGEOIxfoXzHHxDchsWhnZKjq57G5IX_3gIBJtnXwYFUVk3YPpgvD5cZdtCLRFhVv-SXWRYxsHNW-ZxsLVzH0VW2LzJZqDd9m-b7qcV8YqokGiqHSsKeSU5EUcTgYYRl7o4HK8s7W5AsT0XLdkrwN2PWxpPmVRcPZLn-bnw_sipCH4-PgnEbFuC8SrRTOmx0fkPgAzg45l3c88K4H-sd9e0qOxaOq0pVPsdFkoES9baiMZFPgWUt0CPBbXWsZQdHupALeVm_Qatcm0T3WyaJuBXsVtJDZ1XxdYcnvN64Qnn3aMbKCcmnmb81q4VVyu_P-YPkI-04Q4TMt6LN6Ej9GVgrZFZ38wu5u7g_vS0B9OIz2JgL8DGSHqXN-0IlAfyhjPcrET0FD7UdoJGWXLZY0wEXo5B9Dwt85gOn7tW3l8LSKIyRFuLNE1K5tUqnylKVX7vcUYnwNiNPmDJS7wB-8jYnvwxwdhGq52PVhp7uUrlC8j_6-AKqn8AEzkR2unslbHSCQcQgIxiVfBZXfr26mXjRL6PPvyrRD1g7eoVkcQHOApzkUjYTeuAOZFeT7OzL7ciHij7MlKqXX5Hr9G8ztH3_dbN748x9VpHkarkcRuEbK5PVW4i3gLRdwFhO2IxMo9WRzJY7xYio4-kD4QPX8zbYRo5hfmgmiumb56w7bQbXZh4D3mkVL2OXrAezXl7RMQYpOCkbyhOOyqX8SdjokPHGPEUTKGu4_L9EvRT5zjuF_Z-8njJIbsmxkoUER3DRy9qymr2J3PF-6DSu9c6Dgq7DtGZKgLee9fwkKjh7PE5XVnjDoguPnoV2vvNmkqc2DLvU5PmjVmcqZAjanveukm-OALaL6IvS1oHt7lH_uAi2fUlmPqgcw2iCx2XTvTvMM9hcleeUn1jSF2TE8i7zGnJ_KyTTYMn05yNwDLKdFESFu7Keg2faKkgcMP8hTZ6pfQPntZA1EZ6QyOhhXnk2TLpLWGKL5ACuKV7do_YwzcyiXu-8cf0n0ut4soY2nXJmvZO5BHPRqVjNxTF0C7wqAJVUyrhPzNviQ8V21nQyEcK8OZUrP1ZPQbxNhwqQstgTjSkhzGt6EY_aBGNJpQvCtsCspaoSzhJ9dzOEVb4TczPBihD5rG8YQpcT4f5H9Hv9U9VkSnUBZbdOhnaxolT-4rZ5_6o3edMgOkRO54ljSoyg40tdfgLcMQIzKsaq4uyXlRrbmujA3fYOjThdylMTULux38BQYVVJkmcjLG0ZzaygCzE1EmzIH6yyry01aNBx4GflXYTAjIk-a1AmZZglK0iuZbnc7vZL2j9bP9PSLIZv41npL4JnKeu-dbueCn0ZZeQ5YFm4ohQwF1tDEXgQmoNTsTWqYLSF-TU463ksfoHRXaMgduckOt8i-EISP666D7ADrJUFUZRUwj-ae2Mo7yZQbObY8hxY_plC8eZszDbIJe46Wt6BAXbqmcH40EJJqAgArnbdmjZXqIhauwyxE2ehdNdUc_bV9MKyaqqhB4Y3xL7_AS1VP4btkPDr2s0fi6fOK9C_bsXNaRH0rXFBAZLyTYKqFQ1aekyuCgewK4odQ8aHwkrF8pXkdp6n8vcLPQa9GKpvqRx41-TAnhjHrR-0mw_VMZTjedZg18LfLHG-zm766u5RSzDXXLu4_5jnwzqcX4kP_YGF0mbySNGaiDG8fy_c4yDSi1VMf6YI7A2UPndYScaC-_h5zIOFoVyo7tzrvY-j9ndJTtYEziB37Ickp5vd-sCauuU6xOLJ2BJz87qljZ5z0esjUlSrO3EhyLywMoE2ypzQlJ90jwgF4JPlwCJAPvciGBnRhuDsXdH4tKGSEawxVp2SGrmr9TX_AzvuoI8Tq5PHnYdDFgXI6SP462C3lyYCARgMA_dZCnOSvIx_LNxn_3ZJhOwsv1TXQxyHchM7bTMyE5Jukm6qlaxXl-Xq3l8r4G486qfKoPe9QBpkApBiFMFAklqcC4-dwZ3vH_Su6GNqCq1LOlHHuowTgYTLIzDbqBuWfSQNwMkMBwUCIX5l50ybLXwp-qOa6jxMmCnmR7x2BPGxJZmm62f3t8dfvigBlWi4_kcU8ijp9ipC4lSyww8PquWEkaCS3tzdsFVVXURN9ZTW2l0Kz6VYt9pyIfVk0139MZ9pNgW1PbpbduyFiGEkhVPsG3cV6C4b9YpC7ZQ_ZVgGU729I1sW824URBLfa4ZKODfeMk4OMchQkE4BqqQpGq6fZX9DJoD7KjntxQlFoouD1vbmtWB9w0jDu6Rk3y-HN0UkvGVgYgosi6TxU-lWtkXek6raQ39IsvnpDvoDAv7j0fuQMe8IwQwlOy9reECfy82gY4qaMEHqIClO3ZmtIz76k1q_joEJ39JaqKLERiBIVBRWKt_OhvLsNbKYTeNDQwsMkdndMHIBEjCVjwsJXCC8xh1bTOQPNz2Pb_V7yk5h5fQxxhNmCDSNaApzHPZ5jcEyZuMJ58lrwTx6-qy-t6IlcQxdJSj-CjlkA6U8SXAMNeZfHZlZovrUiSEZTdnXXYZGrHULL1BGChlv_V4UuqlnNrgeuusQyqVY0XcL2IzQuWANUjfNa_Y3vP0Ie59ORwcZ_bMfAn021jah2hWRqMzKBm1gxbWm9zyKrvm1QR07wugrCK-B8nWe5LKJYyzM8CNS96gwbT-mLlDP41z7NVu6tvpEOT4Xb2RZXcn745PfDj_4xNGVUlciHce7I1qJ9_2bx7_5m-Lr1bpBq0fVN7_PkBMeSQwjDUWG5sLBvHAK7qrpYg6qU3KleMC8PMoTKdRvAiUomlUEttCFMYIykjmUgmntbe_U2-I5g3taRAjjaZi_MMCvkakr8PNoZWjcczpBMjMNhK5tE1M6jRgqMkv3zJyFu0ZavL_03nAbePlt8jSjADFhsTXi8ZRrqvYVrVrHGJOHaWDZ8zigksJ9VLrYmmiUoX8zNBEHvAUzXLaQAPwu_8Bv2rv_mNvNSB46CIf5XsSzjbtgNr0UWMbT9A5h1rvStGTYruiW_5pSUGwW_wFmzOHuNEsO_7GFXBxCTmHvqEtfofuR9NDVIVKpCoKgvnenaaAaES3bj2C4fFzMtMUtH1nUIjxnTgKI3NiAz9Nuocrg7zXmVYbwB8THy1y0WC1evbbARhPuoWQf0Pupa27YoWun7rzw4aWUNvrevjf48-3s1METcTJ6XOVqB1m_-UgXMxhRD1kyA7Q9KJk_H8lc0H4qCsKqaFDLCOC-Y50COXfSwf8_6NNWXPWKxmDJehKdJib1d4BF5wGxeicnYsxtBrHoavdc8tF1yMLwmLscIqczw7zQaUVq2zWPrHYXS6s030NFFG-6tsc_CvSeYUCVQOhFbMTxH9U0VxqvnOFa1viniX46EIv-5mMj1kbYGoaV6rnAy_LQGP4d-Xk287NQE67k1O90fvP_i_xunl5sh1g-dfgC6OICIqA12_VdBovQd3QOgsbTCw6aIHZ3--gp7lrTu8rg3HPamWRY1pyrOuk9xUG8f1puVVjJ6QP5CJI3gE7oeZx9mRK526i6EQbhIBRvRJq0MNNQuZtpHjvZbBnhzml5moMQtyY-W_k1yz5XphMiLuAM2zd1qXNkOyN83ScxVOCxlPSV82DG-Nt_sFZz7drQQ8QtqzBiAFLGqbNVJllk9qq1Wrq2ZBY","title":"光達開發 Wiki"}</script>
+<script id="payload" type="application/json">{"v":2,"salt":"oaz5iTbzegTIWQJm_Q8e0A","iv":"lLuYGO5XZGM2D4ja","ct":"meCHrQxtXu8X8SGEReD_i_m33FuX8OUjiECDLSiia1-HxDy5aHHQt-odyK5PPUqMMXRIUNvSobdaYYBLaaXn7iJtsUEzNCeiaTUJf3-2rd6EJ2MPWhfO50P-85j7ZWIaPOejaFCPI_e7HvrtarPUs_wlekcDzUu2kAwMGS4X6RA41Zmpi9EqgIJ5ybZgWIxKyVrjxxMBnCiekOmg9BOMAEz50vhon5EPRRGwwg_ww_MPotBp5klas3vMVFWJQbR4lPQvTj5AVUmzxmeqeGYsL8lBn5UC9rwfxED75gF3SydQIED4K2By8_YtdWsDopln7HKjrzmmwmaQ8K6T-3AXkNtSPtsPGBe5M_U3SAWwjIhxldIYvTSlY1H4g3Z-17fZTzPRBF17zConKQCZW7R0c-bOiROtBJhnCBMekJkOX_BA1wQqU-y536dcI3ZiDDveRTZH9r1IzYSLy4hMlWrsQ-hW2DAFy8x7OThhxJLE2a2KA-6ntw3DyGBukgc4fFojhcCmBh1md5rIGwQS3WA6eiRxV7DbEmHufXlQL6zSMrZmFXxas7saHdZf1idBvimMPmDYTbCgep2EF6qGMlr5AivwvcqoFHsh0epGkOYeqFP8J_Lu4dLTxM_pxRF7tUKLAsx-rsEZJuttGqFDyRdMHaXhOQTAzY1eWiQnewbj8LVvn1l3YFSmYZN5KoX16knlm54jaIbNTTGvA2WweiYCa_TxtaotSLda1wpThDksZ9vZVWxbXLqAkTz0Iga00va_u3xkhHifXDiKeBXLUxGGIXa-uGKEuRuj1YZiZpFNN7m6zHFhfLievqbynFswGwqMFlsOTdIv9iwvQB3Ymgan50XXHJKfVxn26PdwTJDi5GghF3DPf7AKuq-t0kV1XeATBs79KC7Rf2H8Fp_q3dVS9Qm6MlijIUdoYL6xnOmdVSRQ3GfnIp2AMUTiYM86LL4x7VkngrE9gCvF_CyNp26oNvhEKrxnUSDzPxnkaoRrPdm2avhB_LFbbB9pwJCsQjwHlC5MvokNZqC6gMXu55MrW4K9_mPqYX6F60UhpIoiyUdsXllwsd9lZG8wUTWMOPf3TZtpKzO30D-TWQHn2YGqD04Ul-1h6RZtP5oxnX-UZleL25lDht5WFVr-45dLo2yvh_CHhzVEQkqn7WzLz7iht0D5GH-Ph_lIwsiu1JxdBDGa90tbfEj1ButcrNduXbrK8vP2WHP65MyPbXfdOYLjicnZ4q0yiQv1aAir0_XqrzIQVc-GGaIOV_UljdhRd8xBTo9ZwYXRcIj8_G_KUO0r5RbLy3d6wxtu_Ltq5g9uNROgH6pf3aBwzT_1dAT4n5r0huGDmeGCqytyHl5Yal9V1ed5Y1QDKLsWjxET-87a3-VFm6RjAgfQvB1Rhf1VFv6qkxIG6ai9p7rArj-az5miTf6uDFqisjc00P-5MRO02UolF_n20RLCGQXNZ7LFnixb8Pc0-hCJg4QQEgiwZc_kG2y0W5wtCkQHOC7_vg6-2nT3I9_bKy5gXpPyUxrbJwiqg19NfldOpGkNmRihz6Oqn3tYYiN029U1ZIufajZZaoUTRGwUsML9BZo4oAllSMxvIOEsY-SdfvcEwQ2FoiWrDjCzFdYP706VSvwRORQ_-mOH7qj7Q4TJ_-hET4SpOf5oIefR8fmfRBmkUVVfcJ_QIpTJjoSq7fg2b-8zDi_Be1lBUqmnkCpXIPykSD0Y5DgWAWy6FaDr889LIlkNtU9B6_6E3yRsbJlbq7MsNhlYxeB2Bj1zlA994wDRMUcxh4A2adagZwmySf_5Ix0nkIi2mrcT71NEqkdAYjasccfC-EVzzs_QIv_Q_Wlbb7NS_BwVhQx1BNRcaFRz0rlLWABQDOY8yUIZ1hPWEQptLVlAZP6ISJSCrtiDG5yz2ho3s1lZBh4bBmUNIpKdhPhePJ3MawV6X5w0cCURgmbPFscQ0ugW0GhO-0-XBSnjZjuS0jlvOcdQQyjqacoRBrN9vRiP2Zg7N1W0zhFB19rQVBzQisaO7K7OxOK2yfsq-gzyY8_91agdmU8BYoAdZD7ObDPt06QO3nDprVUGS2aAvn-JNcI4Mr3Q6KP8Va_4UMKk9rQBy_aqmim4aieSA0WaGlvysk3QKbZiJclM65jiKL8Q22Z-7j3ztO5Th0o4ZKOO5UJWLW8XY7MaSGnElMBWFDdhr0NV2mWzDr0uplmalhGjDg3I2rW4wcEN27C_r49GAR0EPg3DZgznzfJRGCpbB0j2FeJXapWlrfN8TguAz5EYKZyRlOf9FY8uQBF11zhjTEIZdwUJSp-oaK4mSsqN7DJ3HgX3vLiUjcShDSDJQ8svnRx8UQV3X3V0dHxemctrPuDMF-XLN6NsGLtbaZM7kpSJcVlClzhjrMqiW8F9kcWAA99huRVX3nxlzTXco6JRSRqZ9ZYpTpZoMwF3env7boMaMzguxbly8yrLIcDImoczejQgRexhOuvDmXzzvOQkec0wy6PO6-PZDIVB6Lf9A4E3dA8mUvGak-P4Fjroo68WXK-kCqu8vEUCfFIeGIOYPYeGWo3xJ_3VqmvmKkD38HAF6W2QHT339d7bsvhZPjGhKDx79tDVKrw4Lse2Mb5EqYVNc4K0gX4rpxAIxZH4ucUxX8nCejFCLXsek-W5_Dw-3qghtvgybgqIEQo_-r3gCk_TKBH7dwpBmf3Wjtgo64UhemFboUySfLYouOZaoRIQFDofB7CBEjzMLtNObwiJguwWlQUskOA4xSP_O0gHWLcFCqtfnbBex3lT7OoDYaiGvDz4x3FGPRv2FIN5NWmtKvRa9Cu4Hen9OvhpNlSCamTe62HPRq5QwoObenkAfhYQFmoGSIWp3Ns-16o2MYyZBkFlBNajSjdOud2JAo2RKmNy6SwI4w_Sf1P4UbaNtS7o_cQ0TRUKhlyi83X5T7Ab8hFkcN9aICmdt1j4k7aV5Ehsoyr7IIgECzwd8AQ4w4QWVI0neHhU3NRblE3FfZjfB9wnY80YnPEc68nAi0lVR3EQ0eXqu-PbzVO1pWejV3gEZQJERO6485zMaveho6QOpfMC2pAS8qb-zmOAS4ufh4d8r2X_HNCwOSFurRm1fYuPFlFWFhG4lkbGeiQQ9ywB8V84jyRBe8wS7cniamurk6UTQHgLBix8PNsF_uPKOcHeVT9x0PVbucjUtlDGwHEcQeI1arvOTd_hCpJstzoZWT3MMyHyp3CXk0fgKv8RYnEOKhXju1ru2xLV4qrMSZ-iX2G1EUnGdQu_b_XfbJChLMiCPqxnfAks-sin6yg5VVb1sGckiY4nuPKM1l1qMqL4vjIu_WPVFpd6DHZAZq1_xXqOq1mJp44wbpJUYENUP-UJVRN_H05ZJuM3W2q1npYDJvenFC5ReKrxEutv1P_wNuWDIwQUHI8HfeNsqnTWyXUBxUSQALIrECKqhPsqndlWtcAlJAZntWlNphIO6hf7T4LgEbKDlT4Qe0E5zSQWUxqvRmsDNL4kFRH7qiQo0nA2aIixJGFLujOvokKyrv-d8OxaE6UktkcOxHNzo3m4tLwHKSqSoe3F6L3dijowT4t9cV42ojkKAiRqYa6KZOHvru18yiCty4DyyRZjz4En3RT3Tpi1BZ8ZULzTek5Tzmseak-q-PdvWey5TNEYxavOG_dAp1xmYy6R9imABiWjSzR23Ru8lOnyljm5xBaiR4mF8XY","title":"光達開發 Wiki"}</script>
 <script src="./unlock.js"></script>
 </body>
 </html>

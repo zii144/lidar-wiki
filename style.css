@@ -10,6 +10,7 @@
   --bg:#0F141B; --surface:#161D27; --ink:#E6EBF2; --muted:#93A0B2; --line:#26303D;
   --accent:#6EA2FF; --accent-soft:#1A2943; --ok:#5DCB91; --ok-soft:#14301F; --warn:#F2B35E; --warn-soft:#352612; color-scheme:dark}}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75;padding-bottom:env(safe-area-inset-bottom,0px)}
 a{color:var(--accent);text-decoration:none}

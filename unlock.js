@@ -1,5 +1,6 @@
-// Client-side decryption for 光達開發 Wiki.
-// key = HKDF-SHA256( PBKDF2-SHA256(password, salt, iter) || linkKey, salt, "lidar-wiki v1" ) -> AES-256-GCM
+// Client-side decryption for 光達開發 Wiki (link-only access).
+// key = HKDF-SHA256(linkKey, salt, "lidar-wiki v2") -> AES-256-GCM
+// The link key travels in the URL fragment (#k=...), which browsers never send to the server.
 (function () {
   var P = JSON.parse(document.getElementById('payload').textContent);
   var subtle = window.crypto && window.crypto.subtle;
@@ -13,14 +14,7 @@
     for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
     return out;
   }
-  function b64uEnc(bytes) {
-    var bin = '';
-    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  }
-  function store(kind) {
-    try { return window[kind]; } catch (e) { return null; }
-  }
+  function store(kind) { try { return window[kind]; } catch (e) { return null; } }
   function get(k) {
     var v = null;
     ['sessionStorage', 'localStorage'].some(function (s) {
@@ -51,30 +45,19 @@
   }
 
   var salt = b64uDec(P.salt), iv = b64uDec(P.iv), ct = b64uDec(P.ct);
-  var K_LINK = 'lw-link-' + P.salt, K_KEY = 'lw-key-' + P.salt;
+  var K_LINK = 'lw-link';
 
   var linkKey = keyFrom(location.hash);
   if (linkKey) {
-    put(K_LINK, linkKey, false);
     try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
   } else {
     linkKey = get(K_LINK);
   }
 
-  function derive(password, lk) {
-    var lkBytes = b64uDec(lk);
-    return subtle.importKey('raw', te.encode(password.normalize('NFC')), 'PBKDF2', false, ['deriveBits'])
-      .then(function (pk) { return subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: salt, iterations: P.iter }, pk, 256); })
-      .then(function (bits) {
-        var ikm = new Uint8Array(32 + lkBytes.length);
-        ikm.set(new Uint8Array(bits), 0); ikm.set(lkBytes, 32);
-        return subtle.importKey('raw', ikm, 'HKDF', false, ['deriveBits']);
-      })
-      .then(function (hk) { return subtle.deriveBits({ name: 'HKDF', hash: 'SHA-256', salt: salt, info: te.encode('lidar-wiki v1') }, hk, 256); })
-      .then(function (b) { return new Uint8Array(b); });
-  }
-  function decrypt(keyBytes) {
-    return subtle.importKey('raw', keyBytes, 'AES-GCM', false, ['decrypt'])
+  function decryptWith(lk) {
+    return subtle.importKey('raw', b64uDec(lk), 'HKDF', false, ['deriveBits'])
+      .then(function (hk) { return subtle.deriveBits({ name: 'HKDF', hash: 'SHA-256', salt: salt, info: te.encode('lidar-wiki v2') }, hk, 256); })
+      .then(function (bits) { return subtle.importKey('raw', bits, 'AES-GCM', false, ['decrypt']); })
       .then(function (k) { return subtle.decrypt({ name: 'AES-GCM', iv: iv }, k, ct); })
       .then(function (pt) { return new TextDecoder().decode(pt); });
   }
@@ -100,12 +83,12 @@
     app.querySelectorAll('[data-share]').forEach(function (box) {
       box.innerHTML =
         '<a class="btn line" target="_blank" rel="noopener" href="https://line.me/R/share?text=' +
-          encodeURIComponent(P.title + '\n' + shareUrl + '\n（密碼另外私訊）') + '">' +
+          encodeURIComponent(P.title + '\n' + shareUrl) + '">' +
           '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9l-.5 2.6c-.1.5.4.8.8.6l4.6-3.3C19.2 17.6 22 14.6 22 11c0-4.4-4.5-8-10-8z"/></svg>' +
           '<span>分享到 LINE</span></a>' +
         '<button class="btn" type="button" data-copy><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span>複製連結</span></button>' +
         '<button class="btn ghost" type="button" data-lock><span>鎖上</span></button>' +
-        '<p class="hint" style="flex-basis:100%;margin:2px 0 0">分享的連結已包含金鑰，密碼請另外私訊。</p>';
+        '<p class="hint" style="flex-basis:100%;margin:2px 0 0">有這個連結的人都能開啟，請只分享給團隊成員。</p>';
       var cb = box.querySelector('[data-copy]');
       cb.addEventListener('click', function () {
         var label = cb.querySelector('span');
@@ -134,40 +117,41 @@
 
   var form = $('lock-form'), err = $('err'), go = $('go');
   function showErr(msg) { err.textContent = msg; err.hidden = !msg; }
+  function showForm() { form.hidden = false; $('opening').hidden = true; }
 
   if (!subtle) {
+    showForm();
     showErr('這個瀏覽器不支援解密。請改用 Safari 或 Chrome 開啟。');
     go.disabled = true;
     return;
   }
-  if (!linkKey) $('key-row').hidden = false;
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var pw = $('pw').value;
-    var lk = linkKey || keyFrom($('lk').value);
-    if (!lk) { showErr('缺少金鑰。請貼上完整的分享連結。'); return; }
-    if (!pw) { showErr('請輸入密碼。'); return; }
+    var lk = keyFrom($('lk').value);
+    if (!lk) { showErr('找不到金鑰。請貼上完整的分享連結。'); return; }
     showErr('');
-    go.disabled = true; go.textContent = '解鎖中…';
-    var keyBytes;
-    derive(pw, lk)
-      .then(function (kb) { keyBytes = kb; return decrypt(kb); })
-      .then(function (html) {
-        var persist = $('remember').checked;
-        linkKey = lk;
-        put(K_LINK, lk, persist);
-        put(K_KEY, b64uEnc(keyBytes), persist);
-        render(html);
-      })
-      .catch(function () {
-        showErr(linkKey ? '密碼不正確，請再試一次。' : '密碼或金鑰不正確，請再試一次。');
-        go.disabled = false; go.textContent = '解鎖';
-      });
+    go.disabled = true; go.textContent = '開啟中…';
+    decryptWith(lk).then(function (html) {
+      linkKey = lk;
+      put(K_LINK, lk, $('remember').checked);
+      render(html);
+    }).catch(function () {
+      showErr('這個連結無法開啟，請確認是最新的分享連結。');
+      go.disabled = false; go.textContent = '開啟';
+    });
   });
 
-  var saved = get(K_KEY);
-  if (saved) {
-    decrypt(b64uDec(saved)).then(render).catch(function () {});
+  if (linkKey) {
+    decryptWith(linkKey).then(function (html) {
+      put(K_LINK, linkKey, false);
+      render(html);
+    }).catch(function () {
+      linkKey = null;
+      showForm();
+      showErr('這個連結無法開啟，請確認是最新的分享連結。');
+    });
+  } else {
+    showForm();
   }
 })();
